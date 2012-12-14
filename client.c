@@ -17,7 +17,7 @@ void error(const char *msg)
 
 int main(int argc, char *argv[])
 {
-    int sockfd, portno, n, t_size, b_tx=0;
+    int sockfd, portno, n, t_size, b_tx=0,b_write=0;
     struct sockaddr_in serv_addr;
     struct hostent *server;
     struct timeval t1, t2;
@@ -52,14 +52,16 @@ int main(int argc, char *argv[])
 
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
         error("ERROR connecting");
-
+    b_write=BUF_SIZE;
     while (b_tx<t_size){
-    	n = write(sockfd,buffer,BUF_SIZE);
+
+        if( b_tx + BUF_SIZE > t_size)
+	   b_write=t_size-b_tx;
+    	n = write(sockfd,buffer,b_write);
     	if (n < 0)
     		error("ERROR writing to socket");
     	b_tx+=n;
     }
-    printf("%s\n",buffer);
     shutdown(sockfd,1);
     /*wait FIN from server*/
     n = read(sockfd,buffer,BUF_SIZE);
@@ -70,7 +72,7 @@ int main(int argc, char *argv[])
 
     elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
     elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
-    printf("Size: %d kB, Time: %f ms, BW: %f Mb/s\n",b_tx/1024, elapsedTime, b_tx*8/elapsedTime/1000);
+    printf("Size: %d B, Time: %f ms, BW: %f Mb/s\n",b_tx, elapsedTime, b_tx*8/elapsedTime/1000);
 
 
     return 0;
