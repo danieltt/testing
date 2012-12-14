@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
     elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
     elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
-    printf("Size: %d B, Time: %f ms, BW: %f Mb/s\n",b_tx, elapsedTime, b_tx*8/elapsedTime/1000);
+    printf("%s Size: %d B, Time: %f ms, BW: %f Mb/s\n",argv[1],b_tx, elapsedTime, b_tx*8/elapsedTime/1000);
 
 
     return 0;
