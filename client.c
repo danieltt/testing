@@ -61,10 +61,12 @@ int main(int argc, char *argv[])
     	if (n < 0)
     		error("ERROR writing to socket");
     	b_tx+=n;
+    	n = read(sockfd,buffer,BUF_SIZE);
     }
     shutdown(sockfd,1);
     /*wait FIN from server*/
-    n = read(sockfd,buffer,BUF_SIZE);
+    while (n > 0)
+    	n = read(sockfd,buffer,BUF_SIZE);
     if (n < 0) error("ERROR reading from socket");
     close(sockfd);
     /*time stamp end*/

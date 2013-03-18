@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     		 n = read(newsockfd,buffer,BUF_SIZE);
     		 b_rx+=n;
     		 if (n < 0) error("ERROR reading from socket");
+    		 n = write(newsockfd,buffer,n);
     	 }while (n > 0);
     	 close(newsockfd);
     	 /*time stamp end*/
